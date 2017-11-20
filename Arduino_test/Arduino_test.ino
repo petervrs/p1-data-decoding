@@ -10,6 +10,16 @@ long interval = 5000;
 long lastTime = 0;
 long charPosition = 0;
 
+String mEVLT = "0";                     // Meter reading Electrics - consumption low tariff
+String mEVHT = "0";                     // Meter reading Electrics - consumption high tariff
+String mEOLT = "0";                     // Meter reading Electrics - return low tariff
+String mEOHT = "0";                     // Meter reading Electrics - return high tariff
+String mEAL = "0";                      // Meter reading Electrics - Actual consumption low tariff
+String mEAH = "0";                      // Meter reading Electrics - Actual consumption high tariff
+String mEAV = "0";                      // Meter reading Electrics - Actual consumption
+String mEAT = "0";                      // Meter reading Electrics - Actual redeliver                // added WSL
+String mG = "0";                        // Meter reading Gas
+
 int findText(String needle, String haystack) {
  int foundpos = -1;
  for (int i = 0; i <= haystack.length() - needle.length(); i++) {
@@ -18,6 +28,17 @@ int findText(String needle, String haystack) {
    }
  }
  return foundpos;
+}
+
+String extractDataFromTelegram(String dataID, long dataIDLength, long dataLength, String *telegram) {
+  long dataIDPos = findText(dataID, *telegram);
+  String data = "";
+  if (dataIDPos != -1) {
+    long startPos = dataIDPos+dataIDLength;
+    long endPos = startPos + dataLength;
+    data = telegram->substring(startPos, endPos);
+  }
+  return data;
 }
 
 void setup() {
@@ -37,5 +58,7 @@ void loop() {
     charPosition = findText("0-0:1.0.0(", testString);
     Serial.printf("Position of 0-0:1.0.0: %d\n", charPosition);
     Serial.println(testString.substring(charPosition + 10, charPosition + 23));
+    Serial.print("\n\n");
+    Serial.println(extractDataFromTelegram("0-0:1.0.0(", 10, 13, &testString));
   }
 }
