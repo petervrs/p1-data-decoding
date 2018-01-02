@@ -58,6 +58,8 @@ int main() {
     string serialNumber = s2.substr(foundValue+11, 32);
     string secondValue = s2.substr(foundValue2+10, 13);
     string thirdValue = s2.substr(foundValue3+10, 10);
+    // TODO: Make this dynamic
+    // Search up to '.', then up to '*'
     string thirdValueFirstPart = thirdValue.substr(0, 6);
     string thirdValueLastPart = thirdValue.substr(7, 3);
 
